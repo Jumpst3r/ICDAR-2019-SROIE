@@ -10,14 +10,17 @@ def test():
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--device", default="cpu")
     parser.add_argument("-i", "--hidden-size", type=int, default=256)
+    parser.add_argument("-o", "--outputFolder", type=str)
 
     args = parser.parse_args()
     args.device = torch.device(args.device)
 
     model = MyModel0(len(VOCAB), 16, args.hidden_size).to(args.device)
-    dataset = MyDataset(None, args.device, test_path="data/test_dict.pth")
+    dataset = MyDataset(None, args.device, test_path="/input/data/test_dict2.pth")
+    k = [x for x in dataset.test_dict.keys()][0]
+    dataset.test_dict[k] = dataset.test_dict[k].replace("\t", " ")
 
-    model.load_state_dict(torch.load("model.pth"))
+    model.load_state_dict(torch.load("/input/model.pth", map_location='cpu'))
 
     model.eval()
     with torch.no_grad():
@@ -34,7 +37,7 @@ def test():
             real_text = dataset.test_dict[key]
             result = pred_to_dict(real_text, pred, prob)
 
-            with open("results/" + key + ".json", "w", encoding="utf-8") as json_opened:
+            with open(args.outputFolder + 'result' + ".json", "w", encoding="utf-8") as json_opened:
                 json.dump(result, json_opened, indent=4)
 
             print(key)

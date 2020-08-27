@@ -3,7 +3,7 @@ import os
 import random
 from os import path
 from string import ascii_uppercase, digits, punctuation
-
+import argparse
 import colorama
 import numpy
 import regex
@@ -19,7 +19,7 @@ VOCAB = ascii_uppercase + digits + punctuation + " \t\n"
 
 class MyDataset(data.Dataset):
     def __init__(
-        self, dict_path="data/data_dict.pth", device="cpu", val_size=76, test_path=None
+        self, dict_path="/input/data/data_dict.pth", device="cpu", val_size=76, test_path=None
     ):
         if dict_path is None:
             self.val_dict = {}
@@ -120,20 +120,16 @@ def sort_text(txt_file):
     return "\n".join([str(text_line) for text_line in text_lines])
 
 
-def create_test_data():
-    keys = sorted(
-        path.splitext(f.name)[0]
-        for f in os.scandir("tmp/task3-test(347p)")
-        if f.name.endswith(".jpg")
-    )
+def create_test_data(opt):
+    keys = ['resbb']
 
-    files = ["tmp/text.task1&2-test(361p)/" + s + ".txt" for s in keys]
+    files = [opt.boxescsv]
 
     test_dict = {}
     for k, f in zip(keys, files):
         test_dict[k] = sort_text(f)
 
-    torch.save(test_dict, "data/test_dict.pth")
+    torch.save(test_dict, "/input/data/test_dict2.pth")
 
 
 def create_data(data_path="tmp/data/"):
@@ -208,8 +204,14 @@ def color_print(text, text_class):
 
 
 if __name__ == "__main__":
-    create_test_data()
 
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('--boxescsv', required=True, help='path to bounding boxes csv')
+  
+    opt = parser.parse_args()
+
+    create_test_data(opt)
     # dataset = MyDataset("data/data_dict2.pth")
     # text, truth = dataset.get_train_data()
     # print(text)

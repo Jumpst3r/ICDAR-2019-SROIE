@@ -1,0 +1,59 @@
+{
+	"general": {
+		"name": "information_extraction",
+		"description": "key information retrieval (company name, address, total)",
+		"developer": "Nicolas Dutly",
+		"affiliation": "University Of Fribourg",
+		"email": "ndutly@student.ethz.ch",
+		"author": "Nicolas Dutly",
+		"DOI": "",
+		"type": "ocr",
+		"license": "MIT",
+		"ownsCopyright": "0"
+	},"input": [
+		{
+			"file": {
+				"name": "resbb",
+				"description": "Word level bounding boxes (csv) with extracted text",
+				"options": {
+					"required": true,
+					"mimeTypes": {
+						"allowed": [
+							"text/csv"
+						],
+						"default": "text/csv"
+					}
+				}
+			}
+		},
+		{
+			"outputFolder": {}
+		}
+	],
+	"output": [
+		{
+			"file": {
+				"name": "KeyInformation",
+				"type": "application/json",
+				"description": "Extracted store name, address and total",
+				"options": {
+					"filename":"log.json",
+					"mimeTypes": {
+						"allowed": [
+							"application/json"
+						],
+						"default": "application/json"
+					},
+					"visualization": false
+				}
+			}
+		}
+	],
+	"method": {
+		"imageType": "docker",
+		"imageName": "jumpst3r/infoextraction",
+		"testData": "https://www.dropbox.com/s/p5hw4sdhruydci3/tmp23542.zip?dl=1",
+		"executableType": "bash",
+		"executable_path": "/input/script.sh"
+	}
+}
