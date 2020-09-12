@@ -37,7 +37,7 @@
 				"type": "application/json",
 				"description": "Extracted store name, address and total",
 				"options": {
-					"filename":"log.json",
+					"filename":"result.json",
 					"mimeTypes": {
 						"allowed": [
 							"application/json"
